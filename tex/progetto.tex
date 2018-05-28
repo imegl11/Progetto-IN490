@@ -1,0 +1,190 @@
+\documentclass[a4paper, twoside]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage[a4paper,heightrounded]{geometry}
+	\geometry{outer=5cm}
+	\geometry{inner=5cm}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage[italiano,algoruled,lined,linesnumbered,shortend]{algorithm2e}
+\usepackage{hyperref}
+\theoremstyle{plain}
+	\newtheorem{lemma}{Lemma}
+	\newtheorem{prop}{Proposizione}
+	\newtheorem{teor}{Teorema}
+\theoremstyle{definition}
+	\newtheorem*{eg}{Esempio}
+	\newtheorem*{oss}{Osservazione}
+
+\newcommand{\fall}{\ \forall}
+\newcommand{\norma}[1]{\Vert#1\Vert}
+\newcommand{\then}{\Rightarrow}
+\newcommand{\vuoto}{\emptyset}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+\newcommand{\U}{\mathcal U}
+
+\newcommand{\Lim}{\lim\limits}
+\newcommand{\Prod}{\prod\limits}
+\newcommand{\Sum}{\sum\limits}
+\newcommand{\Limite}[2]{\lim\limits_{#1\rightarrow#2}}
+
+\newcommand{\al}{\alpha}
+\newcommand{\be}{\beta}
+\newcommand{\ga}{\gamma}
+\newcommand{\de}{\delta}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\vt}{\theta}
+\newcommand{\la}{\lambda}
+\newcommand{\mi}{\mu}
+\newcommand{\si}{\sigma}
+\newcommand{\vf}{\varphi}
+
+\newcommand{\balgo}[2]
+	{\SetKwInOut{Input}{Input}\SetKwInOut{Output}{Output}
+		\SetNlSkip{1em}
+		\BlankLine
+		\Input{#1}
+		\Output{#2}
+		\BlankLine
+		\DontPrintSemicolon
+	}
+
+\hypersetup{hidelinks}
+
+\begin{document}
+\begin{center}
+	\textbf{Corso di Laurea in Matematica - Anno Accademico 2017-2018}
+
+	\textbf{\Large IN490 - Linguaggi di Programmazione}
+
+	\textsc{\small Docente: Marco Pedicini}
+
+	\textsc{\small Studente: Daniele Salierno}
+\end{center}
+\section{Introduzione}
+Lo scopo finale di questo progetto è la costruzione e l'attacco di un crittosistema di Elgamal e di un RSA costruiti a partire da primi di Sophie Germain.
+
+Il documento si articola descrivendo gli algoritmi necessari al funzionamento del programma finale, seguendo il flusso presentato nel procedimento \ref{algo:workflow}, che sintetizza al massimo il lavoro da svolgere.
+
+	\begin{algorithm}
+	\BlankLine
+	\DontPrintSemicolon
+ 	\caption{Workflow}
+ 	\label{algo:workflow}
+
+ 	Generazione di due primi di Sophie Germain $p<q$ sfruttando il Crivello ed il test di Solovay Strassen.\;
+ 	Creazione di un crittosistema di Elgamal con il primo $p$ trovato.\;
+ 	Creazione di un crittosistema RSA con i primi $p,q$ trovati.\;
+ 	Attacchi a Elgamal (Shanks e Pohlig Hellmann) e all'RSA (Wiener e $p-1$ o $\rho$ di Pollard).\;
+	\end{algorithm}
+
+	Una prima parte del programma si occuperà di generare un primo di Sophie Germain, sfruttando tecniche di crivello per scartare a priori alcuni numeri che non soddisfano certe restrizioni modulari (come vedremo nella sezione \ref{sec_sophie_germain}); i numeri che superano il crivello sono sottoposti al test di primalità di Solovay Strassen.
+
+	Con i primi restituiti dall'algoritmo \ref{algo:sophie_germain} vengono costruiti e attaccati i due crittosistemi. Sappiamo che i primi di Sophie Germain sono numeri molto buoni per la costruzione di crittosistemi, quindi ci aspettiamo che gli attacchi falliscano o che impieghino comunque molto tempo per terminare con successo.
+
+	\section{Generazione di Primi}\label{sec_sophie_germain}
+		La prima fase del programma procede con due modalità: in un primo momento vengono generati i primi inferiori ad un bound B preso in input con il metodo del crivello di Eratostene; successivamente il programma passa alla modalità generazione di Sophie Germain, che è il cuore di questa sezione.
+
+		Il counter salta diversi ordini di grandezza e comincia a restituire numeri molto grandi di cui verificare la primalità. Ciascun candidato deve superare i normali test di divisibilità per i primi piccoli trovati dal crivello e di test definiti in una nuova classe (estensione del vecchio filter di erathostenes): la ragion d'essere dei nuovi test è che non stiamo semplicemente cercando un numero primo, ma un primo di Sophie Germain, quindi sfruttiamo una condizione necessaria ma non sufficiente per scartarne alcuni e risparmiare tempo.
+		\begin{prop}
+			Se $p\equiv \frac{n-1} 2\mod n$ allora $p$ non è di Sophie Germain.
+		\end{prop}
+		\begin{proof}
+			Se $p$ fosse di Sophie Germain, allora $q=2p+1$ sarebbe primo, ma
+			\[2p+1=2\frac{n-1}{2}+1=n\equiv 0\mod n\]
+			che contraddice l'ipotesi di primalità di $q$.$\dagger$
+		\end{proof}
+
+		\begin{algorithm}
+		\BlankLine
+		\DontPrintSemicolon
+	 	\caption{Generazione di Primi di Sophie Germain}
+	 	\label{algo:sophie_germain}
+
+	 	Crivello di Eratostene con bound B.\;
+	 	Ricerca di un numero $p$ maggiore di un bound M che soddisfi le restrizioni modulari e di divisibilità $p\neq \frac{f-1} 2\mod f\ \forall f$ filtro.\;
+	 	Test di Solovay Strassen per determinare se $p$ è primo.\;
+	 	Test di Solovay Strassen per determinare se $2p+1$ è primo, dunque se $p$ è di Sophie Germain.\;
+		\end{algorithm}
+
+		Quando un numero $p$ supera tutti i filtri è un candidato primo di Sophie Germain. Per prima cosa applichiamo il test di Solovay Strassen (algoritmo \ref{algo:solovay_strassen}) a $p$ effettuando 30 iterazioni: se $p$ passa i test è composito con probabilità (che consideriamo trascurabile) di $\frac{1}{2^30}$.
+
+		Se $p$ passa il test è (molto probabilmente) primo: dobbiamo solo verificare se $q=2p+1$ lo è. Ripetiamo quindi il test di Solovay Strassen per $q$: se il risultato è nuovamente $q$ probabilmente primo, allora la generazione è finita e termina restituendo la coppia $p,q$.
+
+		Tutto questo procedimento è riassunto nell'algoritmo \ref{algo:sophie_germain}.
+
+		\begin{algorithm}
+		\BlankLine
+		\DontPrintSemicolon
+	 	\caption{Test di Solovay Strassen}
+	 	\label{algo:solovay_strassen}
+		
+		\balgo{$n$ numero da testare, $k$ numero di iterazioni}{\emph{false} se $n$ è composito, \emph{true} se è primo}
+
+		\emph{isPrime} = \emph{true}\;
+		\For {$i=1\rightarrow k$} {
+			Scegli $a\in[2,n-1]$\;
+			$x=\begin{pmatrix} a\\ n\end{pmatrix}$\;\label{row_l-j}
+			\If{$x=0\lor a^{\frac{n-1} 2}\not\equiv x\mod n$} {\label{row_expmod}
+				\emph{isPrime} = \emph{false}\;
+			}
+		}
+		\Return(isPrime);
+		\end{algorithm}
+
+		Nel test di Solovay Strassen sono implicitamente utilizzati un algoritmo per calcolare il simbolo di Legendre-Jacobi (alla riga \ref{row_l-j}) e uno per l'esponenziazione modulare nella condizione a riga \ref{row_expmod} dell'algoritmo \ref{algo:solovay_strassen}.
+
+		Per rendere il calcolo dell'esponenziazione modulare veloce si può usare l'algoritmo Square\&Multiply, riportato come algoritmo \ref{algo:square_multiply}.
+
+		Per il simbolo di Legendre Jacobi usiamo invece l'algoritmo \ref{algo:legendre_jacobi}.
+
+		\begin{algorithm}
+		\BlankLine
+		\DontPrintSemicolon
+	 	\caption{Square\&Multiply}
+	 	\label{algo:square_multiply}
+		
+		\balgo{}{}		
+		\end{algorithm}
+
+		\begin{algorithm}
+		\BlankLine
+		\DontPrintSemicolon
+	 	\caption{Legendre Jacobi}
+	 	\label{algo:legendre_jacobi}
+		
+		\balgo{$a<n\in\N$} {$\begin{pmatrix}a\\n\end{pmatrix}$}
+
+		Da assicurarsi che sia corretto a mano\;
+		%C'è qualche errore con la parte della condizione: perché valutiamo quel simbolo??
+		\While{$a_i\neq1,2$} {
+			Riduciamo $a_i \mod n_i$\;
+			\uIf{$a_i$ pari} {
+				Portiamo fuori tutte le potenze di 2\;
+				Valutiamo $\begin{pmatrix}2\\n_i\end{pmatrix}$\;
+			}
+		Scambiamo $a_i, n_i$ con la reciprocità quadratica\;
+		}
+		\end{algorithm}
+
+	\section{Crittosistema di Elgamal}
+		Per la costruzione del crittosistema è necessario trovare un generatore in $\U(\Z_q)$. Usiamo il seguente teorema.
+		\begin{prop}
+			Se $p,q=2p+1$ sono una coppia di Sophie Germain, $x\in\Z_q$ è un generatore se e solo se $x^p\equiv -1\mod q$.
+		\end{prop}
+		Osserviamo che poiché $p, q$ sono primi, vale $x^p\mod q=\begin{pmatrix}x\\q\end{pmatrix}$.
+
+		Per gli attacchi implementiamo l'algoritmo di Shanks e quello di Pohlig Hellmann
+
+	\section{Crittosistema RSA}
+		Per gli attacchi implementiamo l'attacco di Wiener e il $p-1$ di Pollard o il $\rho$ di Pollard.
+
+\end{document}
