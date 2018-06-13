@@ -31,4 +31,41 @@ public interface Cryptography {
 		} while (s.compareTo(n)>=0);
 		return(s);
 	}
+
+	//PARTE LUCIO
+	//ALGORITMO SQUARE AND MULTIPLY
+
+	public static BigInteger SquareAndMultiply(BigInteger base, BigInteger exp, BigInteger modulo) 
+	{
+		int length;	//lunghezza esponente in binario
+		BigInteger potenza; //(base)^esponente
+		length=exp.bitLenght; //lunghezza esponente
+		String bin; //stringa binaria dell'esponente da usare nell'algoritmo
+		bin=exp.toString; //esponente in binario
+		
+		if(exp.compareTo(BigInteger.ZERO)==0) //se l'esponente è 0
+		{
+			potenza=BigInteger.ONE; //ovviamente (base)^0=1 per ogni base
+		}
+		else //qui inizia l'algoritmo
+			potenza=power(base, exp, modulo, bin);	
+			
+		return potenza;
+	}
+
+	BigInteger power(BigInteger base, BigInteger exp, BigInteger modulo, String bin)
+	{
+		BigInteger potenza=base;
+			for(i=1; i<length; i++)
+			{
+				potenza=potenza.pow(2).mod(modulo);
+				if(bin.charAt(i)==49)
+				{
+					potenza=potenza.multiply(base).mod(modulo);
+				}
+			}
+			
+		return potenza;
+	}
+	
 }
