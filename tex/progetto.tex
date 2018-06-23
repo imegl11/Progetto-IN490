@@ -182,9 +182,5 @@ Il documento si articola descrivendo gli algoritmi necessari al funzionamento de
 		\end{prop}
 		Osserviamo che poiché $p, q$ sono primi, vale $x^p\mod q=\begin{pmatrix}x\\q\end{pmatrix}$.
 
-		Per gli attacchi implementiamo l'algoritmo di Shanks e quello di Pohlig Hellmann
-
-	\section{Crittosistema RSA}
-		Per gli attacchi implementiamo l'attacco di Wiener e il $p-1$ di Pollard o il $\rho$ di Pollard.
-
+Simuliamo una comunicazione e un attacco tramite l'algoritmo di Shanks: una classe costruirà il crittosistema vero e proprio, cercando un generatore modulo $p$ e calcolando il resto della chiave; poi un'altra classe cifrerà un messaggio e lo invierà tramite il crittosistema; infine un'ultima classe intercetterà il messaggio e cercherà di decifrarlo senza conoscere la chiave privata.
 \end{document}
