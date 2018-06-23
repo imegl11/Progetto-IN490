@@ -5,7 +5,7 @@ import java.math.BigInteger;
 public abstract class Item<T> {
 	public Item<T> next;
 
-		//constructors
+//constructors
 	public Item () {
 		this.set(null);
 	}
@@ -14,13 +14,12 @@ public abstract class Item<T> {
 		this.set(tail);
 	}
 
-		//setters
-
-	public void set ( Item<T> list) {
+//setters
+	public void set (Item<T> list) {
 		this.next = list;
 	}
 
-		//getters
+//getters
 	int length() {
 		Item<T> lista = this;
 		int i = 0;
@@ -33,7 +32,7 @@ public abstract class Item<T> {
 		return i;
 	}
 	
-	public	Item<T> next() {
+	public Item<T> next() {
 		return next;
 	}
 	

@@ -6,7 +6,7 @@ public abstract class Sieve<T> extends Item<T> {
 	private BigInteger maxprime;
 	private BigInteger euler;
 
-		//constructos
+//constructors
 	public Sieve(String[] args, Item<T> next) {
 		super(next);
 		
@@ -19,7 +19,7 @@ public abstract class Sieve<T> extends Item<T> {
 		this.euler = BigInteger.ZERO;
 	}
 	
-		//setters
+//setters
 	public void setmax(BigInteger max) {
 		this.maxprime = max;
 	}
@@ -28,7 +28,7 @@ public abstract class Sieve<T> extends Item<T> {
 		this.euler = this.euler.add(BigInteger.ONE);
 	}
 	
-		//getters
+//getters
 	public BigInteger getmax() {
 		return this.maxprime;
 	}

@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 public class Counter extends primes.Counter<Token> {
 
-		//constructors
+//constructors
 	public Counter() {
 		this(new Token());
 	}
@@ -13,9 +13,9 @@ public class Counter extends primes.Counter<Token> {
 		super(token);
 	}
 
-		//setters
+//setters
 	
-		//getters
+//getters
 	 public Token get() {
 		this.token().Set(this.value());
 		this.set();

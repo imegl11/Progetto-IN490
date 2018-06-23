@@ -4,19 +4,20 @@ import java.math.BigInteger;
 
 public class Sieve extends primes.Sieve<Token> {
 
-		//constructors
+//constructors
 	public Sieve(String[] args) {
-		super(args, new Counter()) ;
+		super(args, new Counter());
 		System.out.println("new erathostenes Sieve with string args");
 		
 		this.mainloop();
 		this.print();
 	}
-		//setters
 
-		//getters
-	public	boolean testloop(Token token) {
-		return ( token.value().compareTo(this.getmax()) != 1) ;
+//setters
+
+//getters
+	public boolean testloop(Token token) {
+		return (token.value().compareTo(this.getmax()) != 1);
 	}
 		
 	public void mainloop() {

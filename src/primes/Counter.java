@@ -6,7 +6,7 @@ public abstract class Counter<T> extends Item<T> {
 	private BigInteger count;
 	private T tok;
 
-    //constructors
+//constructors
 	public Counter() {
 		super();
 		this.count = new BigInteger("2");
@@ -22,12 +22,12 @@ public abstract class Counter<T> extends Item<T> {
 		this();
 	}
 	
-		//setters
+//setters
 	public void set() {
 		this.count = this.count.add(BigInteger.ONE);
 	}
 
-		//getters
+//getters
 	public void print() {
 		System.out.println("C:"+this.count);
 	}

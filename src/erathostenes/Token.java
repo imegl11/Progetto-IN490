@@ -5,19 +5,19 @@ import java.math.BigInteger;
 public class Token {
 	private BigInteger num;
 
-		//constructors
+//constructors
 	public Token() {
 		System.out.println("new erathostenes Token");
 		
 		this.num = BigInteger.ZERO;
 	}
 
-		// setters
+// setters
 	public	void Set(BigInteger n) {
 		this.num = n;
 	}
 	
-		// getters
+// getters
 	public BigInteger value() {
 		return this.num;
 	}

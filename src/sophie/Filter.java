@@ -5,14 +5,14 @@ import primes.erathostenes;
 
 public class Filter extends erathostenes.Filter {
 
-		//constructors
+//constructors
 	public Filter(Item<Token> tail, BigInteger p ) {
 		super(tail,p);
 	}
 
-		//setters
+//setters
 
-		//getters
+//getters
 	public boolean test(Token t) {
 		boolean answer = super.test(t);
 		if (t.priming == false && answer == true)

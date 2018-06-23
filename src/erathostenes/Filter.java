@@ -5,14 +5,14 @@ import primes.Item;
 
 public class Filter extends primes.Filter<Token> {
 
-		//constructors
+//constructors
 	public Filter(Item<Token> tail, BigInteger p ) {
 		super(tail,p);
 	}
 
-		//setters
+//setters
 
-		//getters
+//getters
 	public boolean test(Token t) {
 		return(t.value().mod(this.value()).compareTo(BigInteger.ZERO) == 0);
 	}
