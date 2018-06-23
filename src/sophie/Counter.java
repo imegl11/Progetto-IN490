@@ -1,57 +1,35 @@
-package primes.erathostenes ;
+package primes.sophie;
 
-import java.math.BigInteger ;
-//test commit
-public class Counter extends primes.Counter<Token> {
-/*
-private    BigInteger count ;
-private    T tok;
-*/
- 
- // costruttori
-	public Counter() {
-		this(new Token());
-	}
-	
-	public Counter(Token token) {
-		super(token);
-	}
-	
-/*	public Counter(Sieve sieve) {
-		super(sieve);
-	}
-*/
-	/*
-    // setters
-public	void set() {
-		this.count = this.count.add(BigInteger.ONE) ;
+import java.math.BigInteger;
+import primes.erathostenes;
+
+public class Counter extends erathostenes.Counter {
+	//bound è il primo numero resistuito nella generazione dei primi di Sophie Germain
+	private BigInteger bound;
+
+		//constructors
+	public Counter(BigInteger bound) {
+		super(new Token);
+		this.setBound(bound); 
 	}
 
-    // getters
-	
-public void print() {
-		System.out.println("C:"+this.count);
+		//setters
+	private setBound(BigInteger bound) {
+		this.bound = bound;
 	}
-*/
-	 
-	 public Token get()
-	 {
-	 
-	 this.token().Set(this.value());
-	 this.set() ;
-	 
-	 return this.token() ;
+	
+		//getters
+
+	/**
+	* @return token Token contenente il valore di un primo relativamente piccolo, per generare i filtri, se token.priming è true, altrimenti contenente un candidato primo di Sophie Germain molto grande.
+	*/
+	 public Token get() {
+	 	if (super.token().priming == true)
+	 		super.get();
+	 	else {
+	 		super.token().Set(this.bound);
+	 		this.setBound(this.bound.add(new BigInteger("2")));
+	 	}
+		return this.token();
 	 }
-
-/*
-public	BigInteger value() {
-		return this.count ;
-	}
-	
-public 	T token() {
-		return this.tok;
-	}
- 
- */
-
 }

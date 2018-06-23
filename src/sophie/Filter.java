@@ -1,60 +1,28 @@
-package primes.erathostenes ;
+package primes.sophie;
 
-import java.math.BigInteger ;
-import primes.Item ;
+import java.math.BigInteger;
+import primes.erathostenes;
 
-public class Filter extends primes.Filter<Token> {
- //private BigInteger prime ;
+public class Filter extends erathostenes.Filter {
 
-    // costruttori
-
- public Filter(Item<Token> tail, BigInteger p ) {
-	super (tail,p) ;
-    }
-
-	
-/*
- // setters
-private void Set(Item<Token> tail, BigInteger p) {
-	this.prime = p ;
-	super.set(tail) ;
-    }
- 
-    // getters
-public void print() {
-		
-		System.out.print("F:"+this.prime+"->");
-		//if (!(this.next==null))
-		this.next.print() ;
-		
+		//constructors
+	public Filter(Item<Token> tail, BigInteger p ) {
+		super(tail,p);
 	}
-*/
-public boolean test(Token t) {
-		return (t.value().mod(this.value()).compareTo(BigInteger.ZERO) == 0) ;
-	}
-	
-public Token get() {
-		Token token;
-		token=this.next.get() ;
-		while (test(token)) token=next.get();
-		return token;
 
+		//setters
+
+		//getters
+	public boolean test(Token t) {
+		boolean answer = super.test(t);
+		if (t.priming == false && answer == true)
+			answer = this.modularRestriction(t.value());
+		return answer;
 	}
-	
-	
-/*public	BigInteger value() {
-		return this.prime ;
-		
+
+	private boolean modularRestriction(BigInteger p) {
+		BigInteger temp = super.value().subtract(BigInteger.ONE).divide(new BigInteger("2"));
+		return(p.mod(this.temp).compareTo(BigInteger.ZERO) != 0);
 	}
-*/
+
 }
-
-
-
-
-
-
-
-
-
-

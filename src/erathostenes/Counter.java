@@ -1,6 +1,6 @@
-package primes.erathostenes ;
+package primes.erathostenes;
 
-import java.math.BigInteger ;
+import java.math.BigInteger;
 
 public class Counter extends primes.Counter<Token> {
 

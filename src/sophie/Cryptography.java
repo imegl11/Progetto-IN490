@@ -16,7 +16,7 @@ public interface Cryptography {
 		for(i=1; i<iterations; i++) {
 			a = pickTest(candidate);
 			l = legendre(a,candidate);
-			a = modularExponentiation(a, candidate.subtract(BigInteger.ONE).divide(new BigInteger "2"), candidate)
+			a = modularExponentiation(a, candidate.subtract(BigInteger.ONE).divide(new BigInteger("2")), candidate)
 			if(x==0 || a.remainder(candidate).compareTo(x)!=0)
 				isPrime = false;
 		}

@@ -3,7 +3,6 @@ package primes.erathostenes;
 import java.math.BigInteger;
 
 public class Token {
-
 	private BigInteger num;
 
 		//constructors

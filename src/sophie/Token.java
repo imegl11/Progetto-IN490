@@ -1,39 +1,22 @@
-package primes.erathostenes ;
+package primes.sophie;
 
-import java.math.BigInteger ;
+import java.math.BigInteger;
+import primes.erathostenes;
 
 public class Token {
-private BigInteger num ;
-	//costruttori
+	//se true, priming indica che stiamo cercando numeri primi piccoli per i filtri
+	private boolean priming;
+
+		//constructors
 	public Token() {
-		System.out.println("new erathostenes Token");
-		
-		this.num = BigInteger.ZERO ;
-		
+		super Token();
 	}
 
-	// setters
-public	void Set(BigInteger n) {
-		
-		this.num = n ;
-		
-		
+		// setters
+	
+		// getters
+	public boolean priming() {
+		return this.priming;
 	}
-	
-	
-	// getters
-	public BigInteger value() {
-		
-		return this.num;
-	}
-
-	public BigInteger value2() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
-
-
 
 }
