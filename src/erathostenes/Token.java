@@ -1,29 +1,24 @@
-package primes.erathostenes ;
+package primes.erathostenes;
 
-import java.math.BigInteger ;
+import java.math.BigInteger;
 
 public class Token {
-private BigInteger num ;
-	//costruttori
+	private BigInteger num;
+
+		//constructors
 	public Token() {
 		System.out.println("new erathostenes Token");
 		
-		this.num = BigInteger.ZERO ;
-		
+		this.num = BigInteger.ZERO;
 	}
 
-	// setters
-public	void Set(BigInteger n) {
-		
-		this.num = n ;
-		
-		
+		// setters
+	public	void Set(BigInteger n) {
+		this.num = n;
 	}
 	
-	
-	// getters
+		// getters
 	public BigInteger value() {
-		
 		return this.num;
 	}
 
@@ -31,9 +26,5 @@ public	void Set(BigInteger n) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
-
-
 
 }
