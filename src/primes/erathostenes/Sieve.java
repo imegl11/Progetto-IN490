@@ -1,35 +1,38 @@
-package primes.erathostenes ;
+package primes.erathostenes;
 
-import java.math.BigInteger ;
-//import primes.Item;
+import java.math.BigInteger;
 
 public class Sieve extends primes.Sieve<Token> {
 
-public Sieve(String[] args) {
-		super(args, new Counter()) ;
+//constructors
+	public Sieve(String[] args) {
+		super(args, new Counter());
 		System.out.println("new erathostenes Sieve with string args");
 		
 		this.mainloop();
-		this.print() ;
-}
-	
-public	boolean testloop(Token token) {
-		return ( token.value().compareTo(this.getmax()) != 1) ;
-}
-	
-public void mainloop() {
-		Token token ;
+		this.print();
+	}
+
+//setters
+
+//getters
+	public boolean testloop(Token token) {
+		return (token.value().compareTo(this.getmax()) != 1);
+	}
 		
-		token = next.get() ;
+	public void mainloop() {
+		Token token;
+		
+		token = next.get();
 		
 		while (testloop(token)) {
-			this.seteuler() ;
-			this.set( new Filter(this.next , token.value() ));
-			token = this.next.get() ;
-		};
-}
-	
-public Token get() {
-		return null ;
-}
+			this.seteuler();
+			this.set(new Filter(this.next, token.value()));
+			token = this.next.get();
+		}
+	}
+		
+	public Token get() {
+		return null;
+	}
 }
