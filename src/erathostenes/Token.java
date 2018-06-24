@@ -2,7 +2,7 @@ package primes.erathostenes;
 
 import java.math.BigInteger;
 
-public class Token {
+public class Token extends erathostenes.Token {
 	private BigInteger num;
 
 //constructors

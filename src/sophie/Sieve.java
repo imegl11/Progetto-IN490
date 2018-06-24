@@ -4,22 +4,28 @@ import java.math.BigInteger;
 import primes.erathostenes;
 
 public class Sieve extends erathostenes.Sieve {
-	BigInteger sophie;
+	private BigInteger sophie;
+	private boolean priming;
 
 //constructors
-	//il counter non genererà altri primi perché sono tutti maggiori di maxprime, invece dovrebbe generarne un po'
-	//bisogna far collassare tutti questi cicli nel main loop, sfruttando la modalità priming del token
+	/**
+	*args[0] -> maxprime, numero di primi da generare ad ogni iterazione di priming;
+	*args[1] -> bound, numero grande da cui inizia la ricerca di primi di Sophie Germain;
+	*args[2] -> iterations, numero di iterazioni per il test di Solovay Strassen.
+	*/
 	public Sieve(String[] args) {
 		super(args, new Counter(new BigInteger(args[1])));
 		setSophie(BigInteger.ZERO);
+		setPriming(true);
+		int iterations = parseInt(args[2]);
 
 		do {
-			super.mainloop();
-			do
-				Token token = this.next.get();
-			while(!solovayStrassen(token.value(), parseInt(args[2])))
-		} while(!solovayStrassen(token.value().multiply(new BigInteger("2").add(BigInteger.ONE)), parseInt(args[2])))
-		this.print();
+			if (this.priming == true)
+				super.mainloop();
+			else
+				this.mainloop(iterations);
+		} while(!solovayStrassen(token.value().multiply(new BigInteger("2")).add(BigInteger.ONE), iterations))
+		
 	}
 
 //setters
@@ -27,7 +33,25 @@ public class Sieve extends erathostenes.Sieve {
 		this.sophie = p;
 	}
 
+	private void setPriming (boolean b) {
+		this.priming = b;
+	}
+
 //getters
+	private void mainloop(int iterations) {
+		Token tok = next.get();
+		while(!solovayStrassen(token.value(), iterations))
+			tok = next.get();
+	}
+
+	/**
+	* Usiamo la variabile euler del Sieve di Primes per controllare quanti numeri primi troviamo.
+	* Per non sovrascrivere anche il super.mainloop siamo costretti a non cambiare l'interfaccia.
+	*/
+	private boolean testloop(Token token) {
+		return (this.getmax.compareTo(super.value()) != 1);
+	}
+
 	/**
 	* @param candidate Numero da testare
 	* @param iterations Numero di test da effettuare
