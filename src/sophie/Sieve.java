@@ -1,11 +1,12 @@
-package primes.sophie;
+package sophie;
 
 import java.math.BigInteger;
-import primes.erathostenes;
+import java.util.Random;
 
 public class Sieve extends erathostenes.Sieve {
 	private BigInteger sophie;
 	private boolean priming;
+	private BigInteger prime;
 
 //constructors
 	/**
@@ -17,14 +18,14 @@ public class Sieve extends erathostenes.Sieve {
 		super(args, new Counter(new BigInteger(args[1])));
 		setSophie(BigInteger.ZERO);
 		setPriming(true);
-		int iterations = parseInt(args[2]);
+		int iterations = Integer.parseInt(args[2]);
 
 		do {
 			if (this.priming == true)
 				super.mainloop();
 			else
 				this.mainloop(iterations);
-		} while(!solovayStrassen(token.value().multiply(new BigInteger("2")).add(BigInteger.ONE), iterations))
+		} while(!solovayStrassen(this.getPrime().multiply(new BigInteger("2")).add(BigInteger.ONE), iterations));
 		
 	}
 
@@ -33,15 +34,24 @@ public class Sieve extends erathostenes.Sieve {
 		this.sophie = p;
 	}
 
-	private void setPriming (boolean b) {
+	private void setPriming(boolean b) {
 		this.priming = b;
 	}
 
+	private void setCandidate(BigInteger p) {
+		this.prime = p;
+	}
+
 //getters
+	public BigInteger getPrime() {
+		return this.prime;
+	}
+
 	private void mainloop(int iterations) {
 		Token tok = next.get();
-		while(!solovayStrassen(token.value(), iterations))
+		while(!solovayStrassen(tok.value(), iterations))
 			tok = next.get();
+		this.setCandidate(tok.value());
 	}
 
 	/**
@@ -49,7 +59,7 @@ public class Sieve extends erathostenes.Sieve {
 	* Per non sovrascrivere anche il super.mainloop siamo costretti a non cambiare l'interfaccia.
 	*/
 	private boolean testloop(Token token) {
-		return (this.getmax.compareTo(super.value()) != 1);
+		return (this.getmax().compareTo(super.value()) != 1);
 	}
 
 	/**
@@ -64,8 +74,8 @@ public class Sieve extends erathostenes.Sieve {
 		for(i=1; i<iterations; i++) {
 			a = pickTest(candidate);
 			l = legendre(a,candidate);
-			a = modularExponentiation(a, candidate.subtract(BigInteger.ONE).divide(new BigInteger("2")), candidate)
-			if(x==0 || a.remainder(candidate).compareTo(x)!=0)
+			a = modularExponentiation(a, candidate.subtract(BigInteger.ONE).divide(new BigInteger("2")), candidate);
+			if(l==0 || a.remainder(candidate).intValue()!=l)
 				isPrime = false;
 		}
 		return(isPrime);
@@ -75,8 +85,8 @@ public class Sieve extends erathostenes.Sieve {
 	private BigInteger pickTest (BigInteger candidate) {
 		BigInteger s;
 		do {
-			s = new BigInteger(candidate.bitLength(), new Random())
-		} while (s.compareTo(n)>=0);
+			s = new BigInteger(candidate.bitLength(), new Random());
+		} while (s.compareTo(candidate)>=0);
 		return(s);
 	}
 
@@ -109,6 +119,10 @@ public class Sieve extends erathostenes.Sieve {
 			}
 			
 		return potenza;
+	}
+
+	private int legendre(BigInteger p, BigInteger q) {
+		return 0;
 	}
 
 }

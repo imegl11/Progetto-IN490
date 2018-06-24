@@ -1,7 +1,6 @@
-package primes.sophie;
+package sophie;
 
 import java.math.BigInteger;
-import primes.erathostenes;
 
 public class Counter extends erathostenes.Counter {
 	//bound è il primo numero resistuito nella generazione dei primi di Sophie Germain
@@ -12,7 +11,7 @@ public class Counter extends erathostenes.Counter {
 	* @param bound Valore da cui iniziare la ricerca di primi grandi. È sempre dispari.
 	*/
 	public Counter(BigInteger bound) {
-		super(new Token);
+		super(new Token());
 		if (bound.mod(new BigInteger("2")).compareTo(BigInteger.ZERO)==0)
 			this.setBound(bound.add(BigInteger.ONE));
 		else
@@ -29,7 +28,7 @@ public class Counter extends erathostenes.Counter {
 	* @return token Token contenente il valore di un primo relativamente piccolo, per generare i filtri, se token.priming è true, altrimenti contenente un candidato primo di Sophie Germain molto grande.
 	*/
 	 public Token get() {
-	 	if (super.token().priming == true)
+	 	if (this.token().priming() == true)
 	 		super.get();
 	 	else {
 	 		super.token().Set(this.bound);
