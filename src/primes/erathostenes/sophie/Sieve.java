@@ -2,12 +2,15 @@ package primes.erathostenes.sophie;
 
 import java.math.BigInteger;
 import java.util.Random;
+import primes.erathostenes.Token;
 
 public class Sieve extends primes.erathostenes.Sieve {
 	private BigInteger sophie;
 	private boolean priming;
-	private BigInteger prime;
+	//quantity è l'equivalente di euler, che non può essere utilizzato per motivi di visibilità (non esiste un modo per settarlo a ZERO)
 	private BigInteger quantity;
+	//attributo temporaneo da eliminare nella versione definitiva, fondendolo con sophie
+	private BigInteger candidate;
 
 //constructors
 	/**
@@ -21,14 +24,19 @@ public class Sieve extends primes.erathostenes.Sieve {
 		super.setmax(BigInteger.ZERO);
 		setQuantity(BigInteger.ZERO);
 		setSophie(BigInteger.ZERO);
+		setSophie(new BigInteger("5"));
 		setPriming(true);
 		int iterations = Integer.parseInt(args[2]);
 
 		do {
-			if (this.priming == true)
+			if (this.getPriming() == true) {
+				C.setPriming(true);
 				super.mainloop();
-			else
+			}
+			else {
+				C.setPriming(false);
 				this.mainloop(iterations);
+			}
 		} while(!solovayStrassen(this.getPrime().multiply(new BigInteger("2")).add(BigInteger.ONE), iterations));
 	}
 
@@ -38,7 +46,7 @@ public class Sieve extends primes.erathostenes.Sieve {
 	}
 
 	private void setQuantity(BigInteger q) {
-		this.quantity=q;
+		this.quantity = q;
 	}
 
 	private void setPriming(boolean b) {
@@ -46,7 +54,7 @@ public class Sieve extends primes.erathostenes.Sieve {
 	}
 
 	private void setCandidate(BigInteger p) {
-		this.prime = p;
+		this.candidate = p;
 	}
 
 	private void addQuantity() {
@@ -54,26 +62,33 @@ public class Sieve extends primes.erathostenes.Sieve {
 	}
 
 //getters
+	public boolean getPriming() {
+		return this.priming;
+	}
+
 	public BigInteger getPrime() {
-		return this.prime;
+		return this.sophie;
 	}
 
 	public BigInteger getQuantity(BigInteger q) {
 		return this.quantity;
 	}
 
+	/**
+	* @param iterations indica il numero di iterazioni del test di Solovay Strassen
+	* Questo mainloop non sovrascrive il vecchio poiché ha un'interfaccia diversa.
+	*/
 	private void mainloop(int iterations) {
-		Token tok = next.get();
+		Token tok = (((Filter) next).get(this.getPriming()));
 		while(!solovayStrassen(tok.value(), iterations))
 			tok = next.get();
 		this.setCandidate(tok.value());
 	}
 
 	/**
-	* Usiamo la variabile euler del Sieve di Primes per controllare quanti numeri primi troviamo.
 	* Per non sovrascrivere anche il super.mainloop siamo costretti a non cambiare l'interfaccia.
 	*/
-	private boolean testloop(Token token) {
+	public boolean testloop(Token token) {
 		return (this.getmax().compareTo(super.value()) != 1);
 	}
 
@@ -105,7 +120,7 @@ public class Sieve extends primes.erathostenes.Sieve {
 		return(s);
 	}
 
-	//dumb methods for compiling
+	//dumb methods for compiling(or at least trying to)
 	private BigInteger modularExponentiation(BigInteger b, BigInteger e, BigInteger m){
 		return BigInteger.ZERO;
 	}
