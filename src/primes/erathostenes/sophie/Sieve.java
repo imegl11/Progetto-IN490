@@ -164,36 +164,44 @@ public class Sieve extends primes.erathostenes.Sieve {
 		return n ;
 	}
 
-/* Da correggere!
-	private BigInteger modularExponentiation(BigInteger base, BigInteger exp, BigInteger modulo) {
-		int length;	//lunghezza esponente in binario
+	/**
+	 * @param base 
+	 * @param exp esponente
+	 * @param modulo
+	 * @return esponenziazione modulare
+	 */
+	public static BigInteger modularExponentiation(BigInteger base, BigInteger exp, BigInteger modulo) 
+	{
 		BigInteger potenza; //(base)^esponente
-		length=exp.bitLenght; //lunghezza esponente
-		String bin; //stringa binaria dell'esponente da usare nell'algoritmo
-		bin=exp.toString; //esponente in binario
-		
-		if(exp.compareTo(BigInteger.ZERO)==0) //se l'esponente ?0
+		if(exp.compareTo(BigInteger.ZERO)==0) //se l'esponente è 0
 		{
 			potenza=BigInteger.ONE; //ovviamente (base)^0=1 per ogni base
 		}
 		else //qui inizia l'algoritmo
-			potenza=power(base, exp, modulo, bin);	
+			potenza=power(base, exp, modulo);	
 			
 		return potenza;
 	}
 
-	private BigInteger power(BigInteger base, BigInteger exp, BigInteger modulo, String bin) {
-		BigInteger potenza=base;
-			for(i=1; i<length; i++)
-			{
-				potenza=potenza.pow(2).mod(modulo);
-				if(bin.charAt(i)==49)
-				{
-					potenza=potenza.multiply(base).mod(modulo);
-				}
-			}
-			
+	static BigInteger power(BigInteger base, BigInteger exp, BigInteger modulo)
+	{
+		BigInteger potenza;
+		int i;
+		int length = exp.bitLength(); //lunghezza esponente in binario
+		String bin=exp.toString(2); //esponente in binario
+		BigInteger b=base;
+		
+		if(bin.charAt(length-1)==49)
+			potenza=base;
+		else
+			potenza=BigInteger.ONE;
+		for(i=1; i<length; i++)
+		{				
+			b=b.pow(2).mod(modulo);
+			if(bin.charAt(length-1-i)==49)
+				potenza=potenza.multiply(b).mod(modulo);
+		}
 		return potenza;
-	}*/
+	}
 
 }
