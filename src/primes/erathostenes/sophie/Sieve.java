@@ -118,6 +118,7 @@ public class Sieve extends primes.erathostenes.Sieve {
 	private int legendre(BigInteger p, BigInteger q) {
 		BigInteger tmp ;
 		boolean positivity = true ;
+		int n ;
 	
 		while(p.compareTo(BigInteger.ZERO) != 0 && p.compareTo(BigInteger.ONE) != 0) {
 			
