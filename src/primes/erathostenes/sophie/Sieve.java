@@ -109,9 +109,44 @@ public class Sieve extends primes.erathostenes.Sieve {
 	private BigInteger modularExponentiation(BigInteger b, BigInteger e, BigInteger m){
 		return BigInteger.ZERO;
 	}
-
+	
+	/**
+	*Costruttore che calcola il simbolo di Legendre-Jacobi prendendo in input:
+	* @param p Numero primo BigInteger
+	* @param q Numero primo dispari BigInteger
+	*/
 	private int legendre(BigInteger p, BigInteger q) {
-		return 0;
+		BigInteger tmp ;
+		boolean positivity = true ;
+		int n ;
+	
+		while(p.compareTo(BigInteger.ZERO) != 0 && p.compareTo(BigInteger.ONE) != 0) {
+			
+			if(p.mod(new BigInteger("2")).compareTo(BigInteger.ZERO) == 0) { //If 2|p, do p/2
+				p = p.divide(new BigInteger("2")) ;
+				if(q.mod(new BigInteger("8")).compareTo(new BigInteger("3")) == 0 || q.mod(new BigInteger("8")).compareTo(new BigInteger("5")) == 0) 
+					positivity = !positivity ; //Sign unchanged if q = +1,-1 (mod 8)
+			}else{
+				if(p.compareTo(q) >= 0) //If p > q, do p (mod q)
+					p = p.mod(q) ;
+				else{ //If p < q, Quadratic Reciprocity
+					tmp = p ;
+					p = q ;
+					q = tmp ;
+					if(p.mod(new BigInteger("4")).compareTo(new BigInteger("3")) == 0 && q.mod(new BigInteger("4")).compareTo(new BigInteger("3")) == 0) 
+						positivity = !positivity ; //Sign unchanged if p or q = 1 (mod 4)
+				}
+			}
+		}
+		if(p.compareTo(BigInteger.ZERO) == 0)
+			n = 0 ;
+		else{
+			if(positivity == true)
+				n = 1 ;
+			else
+				n = -1;
+		}
+		return n ;
 	}
 
 /* Da correggere!
