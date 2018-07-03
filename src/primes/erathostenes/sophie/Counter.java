@@ -1,46 +1,44 @@
 package primes.erathostenes.sophie;
 
 import java.math.BigInteger;
-import primes.erathostenes.Token;
+import primes.erathostenes.sophie.Token;
 
-public class Counter extends primes.erathostenes.Counter {
+public class Counter extends primes.Counter<Token> {
 	//bound è il primo numero resistuito nella generazione dei primi di Sophie Germain
 	private BigInteger bound;
-	private boolean priming;
 
 //constructors
 	/**
-	* @param bound Valore da cui iniziare la ricerca di primi grandi. È sempre dispari.
+	* @param value Valore da cui iniziare la ricerca di primi grandi. È sempre dispari.
 	*/
-	public Counter(BigInteger bound) {
+	public Counter(BigInteger value) {
 		super(new Token());
-		if (bound.mod(new BigInteger("2")).compareTo(BigInteger.ZERO)==0)
-			this.setBound(bound.add(BigInteger.ONE));
+		System.out.println("Created Sophie Counter");
+
+		if (value.mod(new BigInteger("2")).compareTo(BigInteger.ZERO)==0)
+			this.setBound(value.add(BigInteger.ONE));
 		else
-			this.setBound(bound); 
+			this.setBound(value); 
 	}
 
 //setters
-	private void setBound(BigInteger bound) {
-		this.bound = bound;
-	}
-
-	void setPriming(boolean b) {
-		this.priming = b;
+	private void setBound(BigInteger value) {
+		this.bound = value;
 	}
 	
 //getters
-	/**
-	* @param priming Indica la modalità, true per la generazione dei filtri, false per la ricerca dei primi. È sempre false.
-	* @return token Token contenente il valore opportuno (bound o count).
-	*/
-	 public Token get() {
-	 	if (this.priming == true)
-	 		this.get();
-	 	else {
-	 		this.token().Set(this.bound);
-	 		this.setBound(this.bound.add(new BigInteger("2")));
-	 	}
-		return this.token();
-	 }
+	public BigInteger bound() {
+		return this.bound;
+	}
+	public Token get() {
+		if (token().priming()) {
+			super.token().setValue(super.value());
+			super.set();
+		} else {
+			super.token().setValue(this.bound());
+			this.setBound(this.bound().add(new BigInteger("2")));
+		}
+		return token();
+	}
+
 }

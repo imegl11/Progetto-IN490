@@ -2,107 +2,101 @@ package primes.erathostenes.sophie;
 
 import java.math.BigInteger;
 import java.util.Random;
-import primes.erathostenes.Token;
 
-public class Sieve extends primes.erathostenes.Sieve {
+public class Sieve extends primes.Sieve<Token> {
 	private BigInteger sophie;
 	private boolean priming;
-	//quantity è l'equivalente di euler, che non può essere utilizzato per motivi di visibilità (non esiste un modo per settarlo a ZERO)
-	private BigInteger quantity;
-	//attributo temporaneo da eliminare nella versione definitiva, fondendolo con sophie
-	private BigInteger candidate;
+	private int offset;
+	private int iterations;
 
 //constructors
 	/**
-	* @param args[0] -> maxprime, numero di primi da generare ad ogni iterazione di priming;
-	* @param args[1] -> bound, numero grande da cui inizia la ricerca di primi di Sophie Germain;
+	* @param args[0] -> bound, numero grande da cui inizia la ricerca di primi di Sophie Germain;
+	* @param args[1] -> maxprime, numero di primi da generare ad ogni iterazione di priming;
 	* @param args[2] -> iterations, numero di iterazioni per il test di Solovay Strassen.
 	*/	
 	public Sieve(String[] args) {
-		Counter C = new Counter(new BigInteger(args[1]));
-		super.set(C);
-		super.setmax(BigInteger.ZERO);
-		setQuantity(BigInteger.ZERO);
-		setSophie(BigInteger.ZERO);
+		super(args, new Counter(new BigInteger(args[0])));
 		setSophie(new BigInteger("5"));
-		setPriming(true);
-		int iterations = Integer.parseInt(args[2]);
-
-		do {
-			if (this.getPriming() == true) {
-				C.setPriming(true);
-				super.mainloop();
-			}
-			else {
-				C.setPriming(false);
-				this.mainloop(iterations);
-			}
-		} while(!solovayStrassen(this.getPrime().multiply(new BigInteger("2")).add(BigInteger.ONE), iterations));
+		setOffset(Integer.parseInt(args[1]));
+		setIterations(Integer.parseInt(args[2]));
+		this.mainloop();
 	}
 
 //setters
-	private void setSophie(BigInteger p) {
-		this.sophie = p;
+	private void setIterations (int n) {
+		this.iterations = n;
 	}
 
-	private void setQuantity(BigInteger q) {
-		this.quantity = q;
+	private void setOffset(int n) {
+		this.offset = n;
 	}
 
 	private void setPriming(boolean b) {
 		this.priming = b;
 	}
 
-	private void setCandidate(BigInteger p) {
-		this.candidate = p;
-	}
-
-	private void addQuantity() {
-		this.quantity = this.quantity.add(BigInteger.ONE);
+	private void setSophie(BigInteger p) {
+		this.sophie = p;
 	}
 
 //getters
-	public boolean getPriming() {
+	public boolean priming() {
 		return this.priming;
 	}
 
-	public BigInteger getPrime() {
-		return this.sophie;
+	public void print() {
+		System.out.println("Founded Sophie Germain prime "+this.sophie);
 	}
 
-	public BigInteger getQuantity(BigInteger q) {
-		return this.quantity;
+	public Token get() {
+		Token T = new Token();
+		T.setValue(this.sophie);
+		return T;
 	}
 
-	/**
-	* @param iterations indica il numero di iterazioni del test di Solovay Strassen
-	* Questo mainloop non sovrascrive il vecchio poiché ha un'interfaccia diversa.
-	*/
-	private void mainloop(int iterations) {
-		Token tok = (((Filter) next).get(this.getPriming()));
-		while(!solovayStrassen(tok.value(), iterations))
+	public int iterations() {
+		return this.iterations;
+	}
+
+	public boolean testloop(Token tok) {
+		return (!solovayStrassen(tok.value(), this.iterations()));
+	}
+
+	public void mainloop() {
+		Token tok;
+		int i;
+
+		do {
+			//genero i filtri
 			tok = next.get();
-		this.setCandidate(tok.value());
-	}
+			super.set(new Filter(this.next, tok.value()));
+			for (i=1; i<this.offset; i++) {
+				tok = next.get();
+				super.set(new Filter(this.next, tok.value()));
+			}
 
-	/**
-	* Per non sovrascrivere anche il super.mainloop siamo costretti a non cambiare l'interfaccia.
-	*/
-	public boolean testloop(Token token) {
-		return (this.getmax().compareTo(super.value()) != 1);
+			//cerco il primo di Sophie
+			do {
+				tok.setPriming(false);
+				tok = next.get();
+				this.setSophie(tok.value());
+			} while(this.testloop(tok));
+		} while(!solovayStrassen(tok.value().multiply(new BigInteger("2")).add(BigInteger.ONE), iterations));
+
 	}
 
 	/**
 	* @param candidate Numero da testare
 	* @param iterations Numero di test da effettuare
 	*/
-	public boolean solovayStrassen(BigInteger candidate, int iterations) {
+	private boolean solovayStrassen(BigInteger candidate, int iterations) {
 		boolean isPrime = true;
 		int i,l;
 		BigInteger a;
 
 		for(i=1; i<iterations; i++) {
-			a = pickTest(candidate);
+			a = pickRand(candidate);
 			l = legendre(a,candidate);
 			a = modularExponentiation(a, candidate.subtract(BigInteger.ONE).divide(new BigInteger("2")), candidate);
 			if(l==0 || a.remainder(candidate).intValue()!=l)
@@ -112,17 +106,15 @@ public class Sieve extends primes.erathostenes.Sieve {
 	}
 
 	/*Bisognerebbe trovare un metodo più efficace per scegliere questi numeri senza ripetizioni*/
-	private BigInteger pickTest (BigInteger candidate) {
+	/**
+	* @param max Genera un biginteger casuale minore di max.
+	*/
+	public BigInteger pickRand (BigInteger max) {
 		BigInteger s;
 		do {
-			s = new BigInteger(candidate.bitLength(), new Random());
-		} while (s.compareTo(candidate)>=0);
+			s = new BigInteger(max.bitLength(), new Random());
+		} while (s.compareTo(max)>=0);
 		return(s);
-	}
-
-	//dumb methods for compiling(or at least trying to)
-	private BigInteger modularExponentiation(BigInteger b, BigInteger e, BigInteger m){
-		return BigInteger.ZERO;
 	}
 	
 	/**
@@ -173,7 +165,7 @@ public class Sieve extends primes.erathostenes.Sieve {
 	public static BigInteger modularExponentiation(BigInteger base, BigInteger exp, BigInteger modulo) 
 	{
 		BigInteger potenza; //(base)^esponente
-		if(exp.compareTo(BigInteger.ZERO)==0) //se l'esponente � 0
+		if(exp.compareTo(BigInteger.ZERO)==0) //se l'esponente 0
 		{
 			potenza=BigInteger.ONE; //ovviamente (base)^0=1 per ogni base
 		}

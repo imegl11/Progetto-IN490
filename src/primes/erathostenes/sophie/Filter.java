@@ -2,25 +2,28 @@ package primes.erathostenes.sophie;
 
 import java.math.BigInteger;
 import primes.Item;
-import primes.erathostenes.Token;
+import primes.erathostenes.sophie.Token;
 
-public class Filter extends primes.erathostenes.Filter implements DoubleMode {
-	private boolean priming;
+public class Filter extends primes.Filter<Token> {
+
 //constructors
-	public Filter(Item<Token> tail, BigInteger p ) {
+	public Filter(Item<Token> tail, BigInteger p) {
 		super(tail,p);
-		this.priming = true;
 	}
 
 //setters
-	private void mode() {
-		this.priming = !this.priming;
-	}
 
 //getters
+	public Token get() {
+		Token tok = next.get();
+		while (test(tok))
+			tok = next.get();
+		return tok;
+	}
+
 	public boolean test(Token t) {
-		boolean answer = super.test(t);
-		if (this.priming == false && answer == true)
+		boolean answer = divide(t.value());
+		if (t.priming() == false && answer == false)
 			answer = this.modularRestriction(t.value());
 		return answer;
 	}
@@ -30,12 +33,8 @@ public class Filter extends primes.erathostenes.Filter implements DoubleMode {
 		return(p.mod(temp).compareTo(BigInteger.ZERO) != 0);
 	}
 
-	public Token get(boolean priming) {
-		Token tok;
-		this.mode();
-		tok = super.get();
-		this.mode();
-		return tok;
+	private boolean divide (BigInteger n) {
+		return (n.mod(super.value()).compareTo(BigInteger.ZERO) == 0);
 	}
 
 }
