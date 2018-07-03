@@ -9,7 +9,6 @@ public class Filter extends primes.Filter<Token> {
 //constructors
 	public Filter(Item<Token> tail, BigInteger p) {
 		super(tail,p);
-		System.out.println("New Filter: "+p);
 	}
 
 //setters
@@ -22,16 +21,23 @@ public class Filter extends primes.Filter<Token> {
 		return tok;
 	}
 
+	/**
+	*if return true, the mainloop will go on
+	*/
 	public boolean test(Token t) {
 		boolean answer = divide(t.value());
 		if (t.priming() == false && answer == false)
 			answer = this.modularRestriction(t.value());
+		//debug lines
+		/*	if (!t.priming() && answer && super.value().compareTo(BigInteger.TEN)>0) {
+				System.out.println("modularRestriction "+ super.value()+" failed");
+			}*/
 		return answer;
 	}
 
 	private boolean modularRestriction(BigInteger p) {
-		BigInteger temp = super.value().subtract(BigInteger.ONE).divide(new BigInteger("2"));
-		return(p.mod(temp).compareTo(BigInteger.ZERO) != 0);
+		BigInteger tmp = p.subtract(BigInteger.ONE).divide(new BigInteger("2"));
+		return tmp.mod(super.value()).compareTo(BigInteger.ZERO) == 0;
 	}
 
 	private boolean divide (BigInteger n) {

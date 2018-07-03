@@ -18,7 +18,7 @@ public class Counter extends primes.Counter<Token> {
 		if (value.mod(new BigInteger("2")).compareTo(BigInteger.ZERO)==0)
 			this.setBound(value.add(BigInteger.ONE));
 		else
-			this.setBound(value); 
+			this.setBound(value);
 	}
 
 //setters

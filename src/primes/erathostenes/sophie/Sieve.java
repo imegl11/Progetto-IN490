@@ -67,20 +67,25 @@ public class Sieve extends primes.Sieve<Token> {
 
 		do {
 			//genero i filtri
+			System.out.println("Sieve: generating filters");
 			tok = next.get();
 			super.set(new Filter(this.next, tok.value()));
 			for (i=1; i<this.offset; i++) {
 				tok = next.get();
-				System.out.println("Filter "+i);
 				super.set(new Filter(this.next, tok.value()));
 			}
+			System.out.println("Sieve: last filter "+next.value());
 
 			//cerco il primo di Sophie
+			System.out.println("Sieve: looking for Sophie Germain prime");
 			do {
 				tok.setPriming(false);
 				tok = next.get();
 				this.setSophie(tok.value());
 			} while(this.testloop(tok));
+			System.out.println("Sieve: founded prime "+this.sophie);
+			System.out.println(" ");
+			tok.setPriming(true);
 		} while(!solovayStrassen(this.sophie.multiply(new BigInteger("2")).add(BigInteger.ONE), iterations));
 
 	}
