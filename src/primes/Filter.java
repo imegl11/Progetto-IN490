@@ -7,7 +7,7 @@ public abstract class Filter<T> extends Item<T> {
 
 //constructors
 	public Filter(Item<T> tail, BigInteger p ) {
-		System.out.println("new primes Filter");
+		//System.out.println("new primes Filter");
 		this.Set(tail,p);
   }
 

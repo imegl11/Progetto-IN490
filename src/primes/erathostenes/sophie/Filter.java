@@ -9,6 +9,7 @@ public class Filter extends primes.Filter<Token> {
 //constructors
 	public Filter(Item<Token> tail, BigInteger p) {
 		super(tail,p);
+		System.out.println("New Filter: "+p);
 	}
 
 //setters

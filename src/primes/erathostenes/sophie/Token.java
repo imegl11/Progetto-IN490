@@ -10,6 +10,7 @@ public class Token {
 	public Token() {
 		System.out.println("Token created");
 		this.value = BigInteger.ZERO;
+		this.setPriming(true);
 	}
 
 //setters

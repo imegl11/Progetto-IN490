@@ -5,7 +5,6 @@ import java.util.Random;
 
 public class Sieve extends primes.Sieve<Token> {
 	private BigInteger sophie;
-	private boolean priming;
 	private int offset;
 	private int iterations;
 
@@ -20,6 +19,7 @@ public class Sieve extends primes.Sieve<Token> {
 		setSophie(new BigInteger("5"));
 		setOffset(Integer.parseInt(args[1]));
 		setIterations(Integer.parseInt(args[2]));
+		this.printAll();
 		this.mainloop();
 	}
 
@@ -32,21 +32,19 @@ public class Sieve extends primes.Sieve<Token> {
 		this.offset = n;
 	}
 
-	private void setPriming(boolean b) {
-		this.priming = b;
-	}
-
 	private void setSophie(BigInteger p) {
 		this.sophie = p;
 	}
 
 //getters
-	public boolean priming() {
-		return this.priming;
-	}
-
 	public void print() {
 		System.out.println("Founded Sophie Germain prime "+this.sophie);
+	}
+
+	public void printAll() {
+		System.out.println("Sophie candidate: "+this.sophie);
+		System.out.println("Offset for Filter generation: "+this.offset);
+		System.out.println("Iterations for Solovay Strassen test: "+this.iterations);
 	}
 
 	public Token get() {
@@ -73,6 +71,7 @@ public class Sieve extends primes.Sieve<Token> {
 			super.set(new Filter(this.next, tok.value()));
 			for (i=1; i<this.offset; i++) {
 				tok = next.get();
+				System.out.println("Filter "+i);
 				super.set(new Filter(this.next, tok.value()));
 			}
 
@@ -82,7 +81,7 @@ public class Sieve extends primes.Sieve<Token> {
 				tok = next.get();
 				this.setSophie(tok.value());
 			} while(this.testloop(tok));
-		} while(!solovayStrassen(tok.value().multiply(new BigInteger("2")).add(BigInteger.ONE), iterations));
+		} while(!solovayStrassen(this.sophie.multiply(new BigInteger("2")).add(BigInteger.ONE), iterations));
 
 	}
 
@@ -95,12 +94,17 @@ public class Sieve extends primes.Sieve<Token> {
 		int i,l;
 		BigInteger a;
 
-		for(i=1; i<iterations; i++) {
+		for(i=0; i<iterations; i++) {
 			a = pickRand(candidate);
 			l = legendre(a,candidate);
 			a = modularExponentiation(a, candidate.subtract(BigInteger.ONE).divide(new BigInteger("2")), candidate);
-			if(l==0 || a.remainder(candidate).intValue()!=l)
+			//this is necessary to deal with results cong -1 mod candidate
+			if (a.intValue() != 1 && a.intValue() != 0)
+				a = a.subtract(candidate);
+			if(l==0 || a.intValue()!=l) {
 				isPrime = false;
+				i = iterations;
+			}
 		}
 		return(isPrime);
 	}
@@ -113,12 +117,12 @@ public class Sieve extends primes.Sieve<Token> {
 		BigInteger s;
 		do {
 			s = new BigInteger(max.bitLength(), new Random());
-		} while (s.compareTo(max)>=0);
+		} while (s.compareTo(max)>=0 || s.compareTo(BigInteger.ZERO)==0);
 		return(s);
 	}
 	
 	/**
-	*Costruttore che calcola il simbolo di Legendre-Jacobi prendendo in input:
+	*Metoodo che calcola il simbolo di Legendre-Jacobi prendendo in input:
 	* @param p Numero primo BigInteger
 	* @param q Numero primo dispari BigInteger
 	*/
@@ -162,7 +166,7 @@ public class Sieve extends primes.Sieve<Token> {
 	 * @param modulo
 	 * @return esponenziazione modulare
 	 */
-	public static BigInteger modularExponentiation(BigInteger base, BigInteger exp, BigInteger modulo) 
+	public BigInteger modularExponentiation(BigInteger base, BigInteger exp, BigInteger modulo) 
 	{
 		BigInteger potenza; //(base)^esponente
 		if(exp.compareTo(BigInteger.ZERO)==0) //se l'esponente 0
@@ -175,7 +179,7 @@ public class Sieve extends primes.Sieve<Token> {
 		return potenza;
 	}
 
-	static BigInteger power(BigInteger base, BigInteger exp, BigInteger modulo)
+	public BigInteger power(BigInteger base, BigInteger exp, BigInteger modulo)
 	{
 		BigInteger potenza;
 		int i;
