@@ -18,6 +18,7 @@
 	\newtheorem*{eg}{Esempio}
 	\newtheorem*{oss}{Osservazione}
 
+
 \newcommand{\fall}{\ \forall}
 \newcommand{\norma}[1]{\Vert#1\Vert}
 \newcommand{\then}{\Rightarrow}
@@ -142,38 +143,7 @@ Il documento si articola descrivendo gli algoritmi necessari al funzionamento de
 
 		Nel test di Solovay Strassen sono implicitamente utilizzati un algoritmo per calcolare il simbolo di Legendre-Jacobi (alla riga \ref{row_l-j}) e uno per l'esponenziazione modulare nella condizione a riga \ref{row_expmod} dell'algoritmo \ref{algo:solovay_strassen}.
 
-		Per rendere il calcolo dell'esponenziazione modulare veloce si può usare l'algoritmo Square\&Multiply, riportato come algoritmo \ref{algo:square_multiply}.
-
-		Per il simbolo di Legendre Jacobi usiamo invece l'algoritmo \ref{algo:legendre_jacobi}.
-
-		\begin{algorithm}
-		\BlankLine
-		\DontPrintSemicolon
-	 	\caption{Square\&Multiply}
-	 	\label{algo:square_multiply}
-		
-		\balgo{}{}		
-		\end{algorithm}
-
-		\begin{algorithm}
-		\BlankLine
-		\DontPrintSemicolon
-	 	\caption{Legendre Jacobi}
-	 	\label{algo:legendre_jacobi}
-		
-		\balgo{$a<n\in\N$} {$\begin{pmatrix}a\\n\end{pmatrix}$}
-
-		Da assicurarsi che sia corretto a mano\;
-		%C'è qualche errore con la parte della condizione: perché valutiamo quel simbolo??
-		\While{$a_i\neq1,2$} {
-			Riduciamo $a_i \mod n_i$\;
-			\uIf{$a_i$ pari} {
-				Portiamo fuori tutte le potenze di 2\;
-				Valutiamo $\begin{pmatrix}2\\n_i\end{pmatrix}$\;
-			}
-		Scambiamo $a_i, n_i$ con la reciprocità quadratica\;
-		}
-		\end{algorithm}
+		Per rendere il calcolo dell'esponenziazione modulare veloce si può usare l'algoritmo Square\&Multiply.
 
 	\section{Crittosistema di Elgamal}
 		Per la costruzione del crittosistema è necessario trovare un generatore in $\U(\Z_q)$. Usiamo il seguente teorema.
@@ -182,5 +152,32 @@ Il documento si articola descrivendo gli algoritmi necessari al funzionamento de
 		\end{prop}
 		Osserviamo che poiché $p, q$ sono primi, vale $x^p\mod q=\begin{pmatrix}x\\q\end{pmatrix}$.
 
-Simuliamo una comunicazione e un attacco tramite l'algoritmo di Shanks: una classe costruirà il crittosistema vero e proprio, cercando un generatore modulo $p$ e calcolando il resto della chiave; poi un'altra classe cifrerà un messaggio e lo invierà tramite il crittosistema; infine un'ultima classe intercetterà il messaggio e cercherà di decifrarlo senza conoscere la chiave privata.
+		Simuliamo una comunicazione e un attacco tramite l'algoritmo di Shanks: una classe costruirà il crittosistema vero e proprio, cercando un generatore modulo $p$ e calcolando il resto della chiave; poi un'altra classe cifrerà un messaggio e lo invierà tramite il crittosistema; infine un'ultima classe intercetterà il messaggio e cercherà di decifrarlo senza conoscere la chiave privata.
+
+		\begin{algorithm}
+			\BlankLine
+			\DontPrintSemicolon
+		 	\caption{Algoritmo di Shanks}
+		 	\label{algo:shanks}
+			
+			\balgo{$q$ primo, $g$ generatore di $\mathbb Z_q$, $y\in \mathbb Z_q$ messaggio da decifrare}{$x=\log_g y$}
+
+			\emph{Leggere q e g}\;
+			$m=\lceil \sqrt{q-1} \rceil$\;
+
+			\For{$j=0\rightarrow m-1$}{
+				\emph{Calcolare le coppie} $(j,g^{mj})$ \emph{e ordinarle per la seconda componente}
+			}
+
+			\emph{Leggere in input il messaggio y}\;
+			\For{$i=0\rightarrow m-1$}{
+				$z=y(g^i)^{-1}$\;
+
+				\If{$\exists j:z=g^{mj}$}{
+					$x=mj+i$\;
+					$i = m-1$\;
+				}
+			}
+			\Return{x}
+		\end{algorithm}
 \end{document}
