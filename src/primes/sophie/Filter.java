@@ -1,8 +1,8 @@
-package primes.erathostenes.sophie;
+package primes.sophie;
 
 import java.math.BigInteger;
 import primes.Item;
-import primes.erathostenes.sophie.Token;
+import primes.sophie.Token;
 
 public class Filter extends primes.Filter<Token> {
 

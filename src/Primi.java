@@ -2,7 +2,7 @@
 * @author Beatrice Beco, Daniele Salierno, Lucio Zaccardelli
 **/
 
-import primes.erathostenes.sophie.Sieve;
+import primes.sophie.Sieve;
 
 public class Primi {
 	public static void main(String[] args) {

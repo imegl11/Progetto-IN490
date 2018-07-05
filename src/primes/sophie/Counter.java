@@ -1,7 +1,7 @@
-package primes.erathostenes.sophie;
+package primes.sophie;
 
 import java.math.BigInteger;
-import primes.erathostenes.sophie.Token;
+import primes.sophie.Token;
 
 public class Counter extends primes.Counter<Token> {
 	//bound è il primo numero resistuito nella generazione dei primi di Sophie Germain

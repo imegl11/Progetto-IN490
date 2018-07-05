@@ -1,4 +1,4 @@
-package primes.erathostenes.sophie;
+package primes.sophie;
 
 import java.math.BigInteger;
 import java.util.Random;
