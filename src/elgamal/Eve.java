@@ -18,6 +18,7 @@ public class Eve extends primes.Item<Token> {
 		BigInteger m, gPower, z, i = BigInteger.ZERO;
 		
 		m = squareRoot(q.add(new BigInteger("-1")));
+		BigInteger[] a = new BigInteger[30]; //creazione vettore di BigInteger
 		pairs(q, g, m);
 		while(i.compareTo(m) < 0) {
 			gPower = ((Sieve)this.next.next.next).modularExponentiation(g, i, q).modInverse(q);

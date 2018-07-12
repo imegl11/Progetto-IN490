@@ -10,18 +10,17 @@ public class Alice extends primes.Item<Token> {
 	/**
 	* @param args[0] -> maxprime, numero di primi da generare ad ogni iterazione di priming;
 	* @param args[1] -> bound, numero grande da cui inizia la ricerca di primi di Sophie Germain;
-	* @param args[2] -> iterations, numero di iterazioni per il test di Solovay Strassen;
-	* @param args[3] -> message.
+	* @param args[2] -> iterations, numero di iterazioni per il test di Solovay Strassen.
 	*/	
 	
 	public Alice(String[] args) {
 		super(new Sieve(args));
-		System.out.println("creazione Alice: ");
+		System.out.println("Creazione Alice");
 		this.q = this.prime();
 		this.g = this.generator(q);
 		this.x = ((Sieve)this.next).pickRand(q); // Private key
 		this.h = ((Sieve)this.next).modularExponentiation(g, x, q); // Public key
-		System.out.println("Alice: q = "+q+", g = "+g+", x = "+x+", h = "+h);
+		print();
 	}
 	
 //setters
@@ -42,7 +41,7 @@ public class Alice extends primes.Item<Token> {
 	public void decryption(CipherText C) {
 		BigInteger s, m;
 		s = ((Sieve)this.next).modularExponentiation(C.value1(), this.x, this.getPrime());
-		m = C.value2().multiply(s.modInverse(this.getPrime()));
+		m = C.value2().multiply(s.modInverse(this.getPrime())).mod(this.getPrime());
 		printMessage(m);
 	}
 	
@@ -63,7 +62,9 @@ public class Alice extends primes.Item<Token> {
 		System.out.println("Alice's decrypted message: "+n);
 	}
 	
-	public void print() {}
+	public void print() {
+		System.out.println("Alice: q = "+q+", g = "+g+", x = "+x+", h = "+h);
+	}
 	
 	public Token get() {
 		return new Token();

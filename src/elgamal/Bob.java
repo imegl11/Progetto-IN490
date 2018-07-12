@@ -7,10 +7,11 @@ import primes.sophie.Token;
 public class Bob extends primes.Item<Token> {
 	private BigInteger y, m, s, c1, c2;
 	
-	public Bob(Alice A, BigInteger m) { 
+	public Bob(Alice A) { 
 		super(A);
-		this.m = m;
-		printMessage(m);
+		System.out.println("Creazione Bob");
+		this.m = ((Sieve)A.next).pickRand(A.getPrime());
+		print();
 		CipherText C = encryption(A);
 		A.decryption(C);
 	}
@@ -19,17 +20,15 @@ public class Bob extends primes.Item<Token> {
 		y = ((Sieve)A.next).pickRand(A.getPrime());
 		c1 = ((Sieve)A.next).modularExponentiation(A.getGenerator(), y, A.getPrime());
 		s = ((Sieve)A.next).modularExponentiation(A.value(), y, A.getPrime());
-		c2 = this.m.multiply(s);
+		c2 = this.m.mod(A.getPrime()).multiply(s).mod(A.getPrime());
 		System.out.println("Bob: y = "+y+", s = "+s);
 		CipherText C = new CipherText(c1, c2);
 		return C;
 	}
 	
-	private void printMessage(BigInteger n){
-		System.out.println("Bob's plaintext message: "+n); //messaggio in chiaro
+	public void print() {
+		System.out.println("Bob's plaintext message: "+m); //messaggio in chiaro
 	}
-	
-	public void print() {}
 	
 	public Token get() {
 		return new Token();
