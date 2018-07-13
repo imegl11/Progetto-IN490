@@ -131,7 +131,7 @@ public class Sieve extends primes.Sieve<Token> {
 	* @param p Numero primo BigInteger
 	* @param q Numero primo dispari BigInteger
 	*/
-	private int legendre(BigInteger p, BigInteger q) {
+	public int legendre(BigInteger p, BigInteger q) {
 		BigInteger tmp ;
 		boolean positivity = true ;
 		int n ;
