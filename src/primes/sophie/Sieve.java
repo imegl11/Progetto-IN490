@@ -127,9 +127,10 @@ public class Sieve extends primes.Sieve<Token> {
 	}
 	
 	/**
-	*Metoodo che calcola il simbolo di Legendre-Jacobi prendendo in input:
-	* @param p Numero primo BigInteger
-	* @param q Numero primo dispari BigInteger
+	* Metodo che calcola il simbolo di Legendre-Jacobi prendendo in input:
+	* @param p Numero primo BigInteger;
+	* @param q Numero primo dispari BigInteger.
+	* @return n Simbolo di Legendre-Jacobi (p/q).
 	*/
 	public int legendre(BigInteger p, BigInteger q) {
 		BigInteger tmp ;
@@ -171,36 +172,30 @@ public class Sieve extends primes.Sieve<Token> {
 	 * @param modulo
 	 * @return esponenziazione modulare
 	 */
-	public BigInteger modularExponentiation(BigInteger base, BigInteger exp, BigInteger modulo) 
-	{
+	public BigInteger modularExponentiation(BigInteger base, BigInteger exp, BigInteger modulo) {
 		BigInteger potenza; //(base)^esponente
-		if(exp.compareTo(BigInteger.ZERO)==0) //se l'esponente 0
-		{
-			potenza=BigInteger.ONE; //ovviamente (base)^0=1 per ogni base
-		}
+		if(exp.compareTo(BigInteger.ZERO) == 0) //se l'esponente 0
+			potenza = BigInteger.ONE; //ovviamente (base)^0=1 per ogni base
 		else //qui inizia l'algoritmo
-			potenza=power(base, exp, modulo);	
-			
+			potenza = power(base, exp, modulo);	
 		return potenza;
 	}
 
-	public BigInteger power(BigInteger base, BigInteger exp, BigInteger modulo)
-	{
+	public BigInteger power(BigInteger base, BigInteger exp, BigInteger modulo) {
 		BigInteger potenza;
 		int i;
 		int length = exp.bitLength(); //lunghezza esponente in binario
-		String bin=exp.toString(2); //esponente in binario
-		BigInteger b=base;
+		String bin = exp.toString(2); //esponente in binario
+		BigInteger b = base;
 		
-		if(bin.charAt(length-1)==49)
-			potenza=base;
+		if(bin.charAt(length-1) == 49)
+			potenza = base;
 		else
-			potenza=BigInteger.ONE;
-		for(i=1; i<length; i++)
-		{				
-			b=b.pow(2).mod(modulo);
-			if(bin.charAt(length-1-i)==49)
-				potenza=potenza.multiply(b).mod(modulo);
+			potenza = BigInteger.ONE;
+		for(i=1; i<length; i++) {				
+			b = b.pow(2).mod(modulo);
+			if(bin.charAt(length-1-i) == 49)
+				potenza = potenza.multiply(b).mod(modulo);
 		}
 		return potenza;
 	}

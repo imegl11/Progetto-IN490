@@ -4,14 +4,21 @@ import java.math.BigInteger;
 public class CipherText {
 	private BigInteger a, b;
 
-//constructors
+	/**
+	 * Costruttore di CipherText prende in input
+	 * @param x 
+	 * @param y
+	 * coppia messaggio cifrato
+	 */
 	public CipherText(BigInteger x, BigInteger y) {
+		System.out.println("Ciphertext creation");
 		set1(x);
 		set2(y);
 		print();		
 	}
 
-// setters
+//Setters
+	
 	private void set1(BigInteger n) {
 		this.a = n;
 	}
@@ -19,7 +26,8 @@ public class CipherText {
 		this.b = n;
 	}
 	
-// getters
+//Getters
+	
 	public BigInteger value1() {
 		return this.a;
 	}
@@ -28,7 +36,7 @@ public class CipherText {
 	}
 	
 	private void print() {
-		System.out.println("Ciphertext: (c1, c2) = ("+this.a+", "+this.b+")");
+		System.out.println("Ciphertext: ("+this.a+", "+this.b+")");
+		System.out.println(" ");
 	}
-	
 }
