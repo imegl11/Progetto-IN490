@@ -5,29 +5,45 @@ import primes.sophie.Sieve;
 import primes.sophie.Token;
 
 public class Bob extends primes.Item<Token> {
-	private BigInteger y, m, s, c1, c2;
+	private BigInteger mex, key;
 	
+	/**
+	 * Costruttore di Bob che prende in input
+	 * @param A oggetto della classe Alice
+	 * da cui prende il primo di Sophie-Germain e crea un mex (messaggio in chiaro) e una chiave privata
+	 */
 	public Bob(Alice A) { 
 		super(A);
-		System.out.println("Creazione Bob");
-		this.m = ((Sieve)A.next).pickRand(A.getPrime());
-		print();
-		CipherText C = encryption(A);
-		A.decryption(C);
+		System.out.println("Bob creation");
+		this.mex = ((Sieve)A.next).pickRand(A.getPrime()); //Plaintext message
+		this.key = ((Sieve)A.next).pickRand(A.getPrime()); //Private key
 	}
 	
-	private CipherText encryption(Alice A) {
-		y = ((Sieve)A.next).pickRand(A.getPrime());
-		c1 = ((Sieve)A.next).modularExponentiation(A.getGenerator(), y, A.getPrime());
-		s = ((Sieve)A.next).modularExponentiation(A.value(), y, A.getPrime());
-		c2 = this.m.mod(A.getPrime()).multiply(s).mod(A.getPrime());
-		System.out.println("Bob: y = "+y+", s = "+s);
+//Setters
+	
+	/**
+	 * Algoritmo per cifrare il messaggio in chiaro. Prende in input
+	 * @param A oggetto di tipo Alice
+	 * e con i suoi attributi cifra mex (messaggio in chiaro) 
+	 * @return C oggetto della classe Alice CipherText (messaggio cifrato)
+	 */
+	public CipherText encryption(Alice A) {
+		BigInteger c1, s, c2;
+		System.out.println("Encryption in progress");
+		
+		c1 = ((Sieve)A.next).modularExponentiation(A.getGenerator(), key, A.getPrime());
+		s = ((Sieve)A.next).modularExponentiation(A.value(), key, A.getPrime());
+		c2 = this.mex.mod(A.getPrime()).multiply(s).mod(A.getPrime());
 		CipherText C = new CipherText(c1, c2);
 		return C;
 	}
 	
+//Getters
+	
 	public void print() {
-		System.out.println("Bob's plaintext message: "+m); //messaggio in chiaro
+		System.out.println("Bob: plaintext message m = "+mex);
+		System.out.println("Bob: private key "+key);
+		System.out.println(" ");
 	}
 	
 	public Token get() {
@@ -35,6 +51,6 @@ public class Bob extends primes.Item<Token> {
 	}
 	
 	public BigInteger value() {
-		return this.c2;
+		return BigInteger.ZERO;
 	}
 }
