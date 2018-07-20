@@ -41,7 +41,7 @@ public class Sieve extends primes.Sieve<Token> {
 		System.out.println("Founded Sophie Germain prime "+this.sophie);
 	}
 
-	public void printAll() {
+	private void printAll() {
 		System.out.println("Sophie candidate: "+this.sophie);
 		System.out.println("Offset for Filter generation: "+this.offset);
 		System.out.println("Iterations for Solovay Strassen test: "+this.iterations);
@@ -53,15 +53,15 @@ public class Sieve extends primes.Sieve<Token> {
 		return T;
 	}
 
-	public int iterations() {
+	private int iterations() {
 		return this.iterations;
 	}
 
-	public boolean testloop(Token tok) {
+	private boolean testloop(Token tok) {
 		return (!solovayStrassen(tok.value(), this.iterations()));
 	}
 
-	public void mainloop() {
+	private void mainloop() {
 		Token tok;
 		int i;
 
